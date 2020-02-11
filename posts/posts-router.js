@@ -31,33 +31,44 @@ router.post("/", (req, res) => {
                 res.status(500).json({ error: "There was an error while saving the post to the database" })
         })
     }
-
 })
 
 router.post("/:id/comments", (req, res) => {
     const id = req.params.id;
     const commentBody = req.body;
-    if(!body.text) {
+    if(!req.body.text) {
         console.log(commentBody)
-        res.res(400).json({ errorMessage: "Please provide text for the comment."})
+        console.log('no text property!!!')
+        res.status(400).json({ errorMessage: "Please provide text for the comment." })
     } else {
-       Posts.insertComment()
+        Posts.insertComment(commentBody)
+        .then(comment => {
+            res.status(201).json(comment)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ error: "There was an error while saving the comment to the database" })
+        })
     }
 })
 
-
-router.get("/:id"), (req, res) => {
-    console.log('works????')
-    Posts.findById(req.params.id)
+router.get("/:id", (req, res) => {
+    const { id } = req.params;
+    console.log(id)
+    Posts.findById(id)
     .then(post => {
-        console.log(post)
-        res.status(200).json(post)
+        if (post) {
+            res.status(200).json(post)
+        } else {
+            res.status(404).json({ message: "The post with the specified ID does not exist." })
+        }
     })
     .catch(err => {
-        console.log(err)
-        res.status(500).json({ error: "The post information could not be retrieved."})
+        res.status(500).json({ error: "The post information could not be retrieved." })
     })
-}
+})
+
+
 
 
 module.exports = router;
