@@ -128,7 +128,7 @@ Configure the API to handle to the following routes:
   - respond with HTTP status code `500` (Server Error).
   - return the following JSON object: `{ error: "There was an error while saving the comment to the database" }`.
 
-⏹When the client makes a `GET` request to `/api/posts`:
+✅When the client makes a `GET` request to `/api/posts`:
 
 - If there's an error in retrieving the _posts_ from the database:
   - cancel the request.
